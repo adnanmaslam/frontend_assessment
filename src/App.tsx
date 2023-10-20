@@ -33,10 +33,13 @@ import {
   Typography,
   AccordionSummary,
   Grid,
+  List,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useDebounce } from "./hooks/useDebounce";
 import { PokeDoxData } from "./store/types";
+import PokemonsListItem from "./components/PokemonsListItem";
+import { Pokemon } from "./intefaces/pokemon";
 
 function App() {
   const dispatch = useDispatch();
@@ -49,7 +52,7 @@ function App() {
   };
   const searchQuery = useDebounce(search, 100);
 
-  console.log("App=>", data, "err-->", error, loading);
+  // console.log("App=>", data, "err-->", error, loading);
   useEffect(() => {
     dispatch(pokeRequest(search));
   }, [searchQuery]);
@@ -90,49 +93,19 @@ function App() {
             </AccordionDetails>
           </Accordion>
         )) ||
-          (error && !loading && <h1>{error}</h1>) ||
-          data?.map((v: Pokemon) => (
-            <Accordion
-              key={v.name}
-              className="pokemon-list accordion"
-              expanded={expanded === v.name}
-              onChange={() => handleChange(v.name)}
-            >
-              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                <Typography sx={{ width: "33%", flexShrink: 0 }}>
-                  {v.name}
-                </Typography>
-                <Typography sx={{ color: "text.secondary" }}>
-                  {v.url}
-                </Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <div className="flex">
-                  <h4>Abilities: </h4>{" "}
-                  <p>{v?.abilities?.map((v) => v.ability?.name).join(" , ")}</p>
-                </div>
-                <div className="flex">
-                  <h4>Moves: </h4>{" "}
-                  <p>{v?.moves?.map((v) => v.move?.name).join(" , ")}</p>
-                </div>
-                <div className="flex">
-                  <h4>Species: </h4> <p>{v?.species?.name}</p>
-                </div>
-                <div className="flex sprites">
-                  <h4>Sprites: </h4>
-                  {Object.values(v.sprites || {})
-                    .filter((v) => typeof v == "string")
-                    .map((val: any) => (
-                      <img src={val} key={val} className="" alt="image" />
-                    ))}
-                </div>
-                <div className="flex">
-                  <h4>Types: </h4>{" "}
-                  <p>{v?.types?.map((v) => v?.type?.name).join(" , ")}</p>
-                </div>
-              </AccordionDetails>
-            </Accordion>
-          ))}
+          (error && !loading && <h1>{error}</h1>) || (
+            <div className="pokemon-list-container">
+              {" "}
+              {data?.map((pokemon: Pokemon) => (
+                <PokemonsListItem
+                  key={pokemon.name}
+                  pokemon={pokemon}
+                  expanded={expanded}
+                  handleChange={handleChange}
+                />
+              ))}
+            </div>
+          )}
       </div>
     </>
   );

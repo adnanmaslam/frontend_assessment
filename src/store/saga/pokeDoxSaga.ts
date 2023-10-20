@@ -6,6 +6,7 @@ import {
 } from "../actions/pokeDoxActions";
 import { GET_POKEMON_REQUEST, } from "../types/pokeDoxActionTypes";
 import { MainClient, PokemonClient } from "pokenode-ts";
+import { Pokemon } from "../../intefaces/pokemon";
 
 
 const getPokemonRequest = async (search: string) => {
@@ -31,7 +32,7 @@ const getPokemonRequest = async (search: string) => {
 function* getPokeMonSaga(action: any) {
     try {
         const response: {
-            results: Array<Pokemon>
+            results: Pokemon[]
         } = yield call(getPokemonRequest, action.payload);
         if (action.payload && !response.results?.length) {
             throw Error('Not Found')
