@@ -16,37 +16,28 @@ import {
   useSyncExternalStore,
   useTransition,
 } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { Provider, connect, useDispatch, useSelector } from "react-redux";
 import { pokeDoxState } from "./store/rootReducer";
 import { pokeRequest } from "./store/actions/pokeDoxActions";
 import {
   TextField,
-  accordionActionsClasses,
   Skeleton,
-  skeletonClasses,
-  accordionClasses,
-  accordionDetailsClasses,
-  accordionSummaryClasses,
   Accordion,
-  AccordionActions,
   AccordionDetails,
-  Typography,
   AccordionSummary,
-  Grid,
-  List,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useDebounce } from "./hooks/useDebounce";
-import { PokeDoxData } from "./store/types";
 import PokemonsListItem from "./components/PokemonsListItem";
 import { Pokemon } from "./intefaces/pokemon";
+import store from "./store";
 
 function App() {
-  const dispatch = useDispatch();
   const [search, setSearch] = useState<string>("");
   const [expanded, setExpanded] = useState<string>("");
   const { data, error, loading } = useSelector((s: pokeDoxState) => s.pokedox);
 
+  const dispatch = useDispatch();
   const searchHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(event.target.value);
   };
@@ -61,7 +52,7 @@ function App() {
     setExpanded(value);
   };
   return (
-    <>
+    <div>
       <TextField
         name=""
         id=""
@@ -93,6 +84,7 @@ function App() {
             </AccordionDetails>
           </Accordion>
         )) ||
+          // yarn ts-jest config:init
           (error && !loading && <h1>{error}</h1>) || (
             <div className="pokemon-list-container">
               {" "}
@@ -107,8 +99,7 @@ function App() {
             </div>
           )}
       </div>
-    </>
+    </div>
   );
 }
-
 export default App;

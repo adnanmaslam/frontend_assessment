@@ -1,3 +1,4 @@
+import { Pokemon } from "../../intefaces/pokemon";
 import {
     GET_POKEMON_REQUEST,
     GET_POKEMONS_FAILURE,
