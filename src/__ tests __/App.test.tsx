@@ -38,8 +38,11 @@ describe("App component", () => {
   });
 
   test("search input updates value correctly", () => {
-    const searchInput = screen.getByPlaceholderText("Search pokemon...");
+    const searchInput = screen.getByPlaceholderText(
+      "Search pokemon..."
+    ) as HTMLInputElement;
     fireEvent.change(searchInput, { target: { value: "pikachu" } });
+
     expect(searchInput.value).toBe("pikachu");
   });
 });
